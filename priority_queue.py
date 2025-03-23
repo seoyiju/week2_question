@@ -1,22 +1,20 @@
 class PriorityQueue:
   def __init__(self):
     self.heap = []
-    self.counter = 0  # tie-breaker
 
   def push(self, item, priority):
-    entry = (priority, self.counter, item)  # (우선순위, 순번, 아이템)
-    self.counter += 1
+    entry = (priority, item)
     self.heap.append(entry)
     self._sift_up(len(self.heap) - 1)
 
   def pop(self):
     if len(self.heap) > 1:
       self._swap(0, len(self.heap) - 1)
-      _, _, item = self.heap.pop()
+      priority, item = self.heap.pop()
       self._sift_down(0)
       return item
     elif len(self.heap) == 1:
-      _, _, item = self.heap.pop()
+      priority, item = self.heap.pop()
       return item
     else:
       return None
@@ -24,7 +22,7 @@ class PriorityQueue:
   def _sift_up(self, index):
     while index > 0:
       parent_index = (index - 1) // 2
-      if self.heap[parent_index][:2] > self.heap[index][:2]:
+      if self.heap[parent_index][0] > self.heap[index][0]:
         self._swap(parent_index, index)
         index = parent_index
       else:
@@ -37,11 +35,11 @@ class PriorityQueue:
       smallest = index
 
       if left_child_index < len(self.heap) and \
-        self.heap[left_child_index][:2] < self.heap[smallest][:2]:
+        self.heap[left_child_index][0] < self.heap[smallest][0]:
         smallest = left_child_index
 
       if right_child_index < len(self.heap) and \
-        self.heap[right_child_index][:2] < self.heap[smallest][:2]:
+        self.heap[right_child_index][0] < self.heap[smallest][0]:
         smallest = right_child_index
 
       if smallest != index:
